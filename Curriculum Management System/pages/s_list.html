@@ -1,0 +1,12 @@
+{% extends "./base.html" %}
+{% block title %}{{title}}{% end %}
+{% block content %}
+     <table border=1 cellpadding='0' cellspacing='0' width='270'>
+        <tr><th>课程号</th><th>课程名</th></tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+        {% end %}
+     </table>
+{% end %}

@@ -1,0 +1,65 @@
+{% extends "./base.html" %}
+{% block title %}{{title}}{% end %}
+{% block content %}
+<form action="/course.add" method="post">
+    <table >
+        <tr>
+            <td>职工号:</td>
+             <td><input type="text" name="tno"></td>
+        </tr>
+        <tr>
+            <td>教师名:</td>
+            <td><input type="text" name="tname"></td>
+        </tr>
+        <tr>
+            <td>课程号:</td>
+            <td><input type="text" name="cno"></td>
+        </tr>
+        <tr>
+            <td>课程名:</td>
+            <td><input type="text" name="cname"></td>
+        </tr>
+        <tr>
+            <td>星期:</td>
+            <td><input type="text" name="week"></td>
+        </tr>
+        <tr>
+            <td>节次:</td>
+            <td><input type="text" name="time"></td>
+        </tr>
+       
+        <tr>
+            <td>上课地点:</td>
+            <td><input type="text" name="classroom"></td>
+        </tr>
+        <tr>
+            <td>授课班级:</td>
+            <td><input type="text" name="class"></td>
+        </tr>
+    </table>
+    <input type="submit" value="添加排课信息"><br>
+    
+     <hr>
+     <table border=1 cellpadding='0' cellspacing='0' width='630'>
+        <tr><th>职工号</th> <th>教师名</th> <th>课程号</th>
+            <th>课程名</th> <th>星期</th> <th>节次</th>
+            <th>教室</th> <th>授课班级</th> <th>操作</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[2] }}</td>
+            <td>{{ item[3] }}</td>
+            <td>{{ item[4] }}</td>
+            <td>{{ item[5] }}</td>
+            <td>{{ item[6] }}</td>
+            <td>{{ item[7] }}</td>
+         <td>
+          <a href="/course.edit/{{item[4]}}/{{item[5]}}/{{item[0]}}"><input type="button" value="修改"></a>
+          <a href="/course.del/{{item[4]}}/{{item[5]}}/{{item[0]}}"><input type="button" value="删除"></a>
+         </td>
+        </tr>
+        {% end %}
+     </table>
+{% end %}

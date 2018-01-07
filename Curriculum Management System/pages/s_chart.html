@@ -1,0 +1,62 @@
+﻿{% extends "./base.html" %}
+{% block title %}课程表{% end %}
+
+{% block content %}
+
+<form action="/student_course" method="post">
+ 班级名：<input type="text" name="_cls">
+  <input type="submit" value="确定">
+  <a href="/scourse.clear"><input type="button" value="清空"></a>
+</form>
+     <table border='1' cellpadding='0' cellspacing='0' width='630',height='700' >
+     	<tr>
+     		<th></th>
+     		<th>星期一</th>
+     		<th>星期二</th>
+     		<th>星期三</th>
+     		<th>星期四</th>
+     		<th>星期五</th>
+     	</tr>
+       <tr>
+          <th>第一大节<br>8:20-9:05<br>9:15-10:00</th>
+          {%for item in first%}
+            {%if item[0]!=None%}
+              <td>{{item[0]}}<br>{{item[1]}}<br>{{item[2]}}</td>{%end%}
+            {%if item[0]==None%}
+              <td>{{" "}}</td>{%end%}
+
+          {%end%}
+       </tr>
+       <tr>
+          <th>第二大节<br>10:20-11:05<br>11:15-12:00</th>
+          {%for item in second%}
+            {%if item[0]!=None%}
+              <td>{{item[0]}}<br>{{item[1]}}<br>{{item[2]}}</td>{%end%}
+            {%if item[0]==None%}
+              <td>{{" "}}</td>{%end%}
+      
+          {%end%}
+       </tr>
+       <tr>
+          <th>第三大节<br>14:00-14:45<br>14:55-15:40</th>
+          {%for item in third%}
+            {%if item[0]!=None%}
+              <td>{{item[0]}}<br>{{item[1]}}<br>{{item[2]}}</td>{%end%}
+            {%if item[0]==None%}
+              <td>{{" "}}</td>{%end%}
+   
+          {%end%}
+       </tr>
+       <tr>
+          <th>第四大节<br>16:00-16:45<br>16:55-17:40</th>
+          {%for item in fourth%}
+            {%if item[0]!=None%}
+              <td>{{item[0]}}<br>{{item[1]}}<br>{{item[2]}}</td>{%end%}
+            {%if item[0]==None%}
+            <td>{{" "}}</td>{%end%}
+        
+          {%end%}
+       </tr>
+       
+   </table>
+{%end%}

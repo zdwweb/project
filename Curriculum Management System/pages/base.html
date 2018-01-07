@@ -1,0 +1,33 @@
+<html lang="zh-cn">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+	<title>{% block title %}{{title}}{% end %}</title>
+	<link rel="stylesheet"  type="text/css"  href="{{ static_url('base.css') }}">
+	{%block js%}  {%end%}
+	
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">课程表管理系统</div>
+
+<div class="left">
+	<ul>
+		<li><a href="/student_course">学生课程表</a></li>
+		<li><a href="/teacher_course">教师课程表</a></li>
+		<li><a href="/courses">课程清单</a></li>
+		<li><a href="/teachers">教师清单</a></li>
+		<li><a href="/schedule">排课信息</a></li>
+	</ul>
+</div>
+
+<div class="content">
+{% block content %}{% end %}
+</div>
+
+<div class="footer">Copyright 2017 by TJPU.</div>
+</div>
+
+</body>
+</html>

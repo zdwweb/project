@@ -1,0 +1,26 @@
+{% extends "./base.html" %}
+{% block title %}修改成绩{% end %}
+{% block content %}
+
+      <form action="/course.edit/{{week}}/{{time}}/{{tno}}" method="post">
+        <table>
+            <tr>
+                <td>课程号：</td>
+                <td> <input type="text" name="cno" value="{{cno}}"></td>
+            </tr>
+            <tr>
+                <td>课程名：</td>
+                <td><input type="text" name="cname" value="{{cname}}"></td>
+            </tr>
+            <tr>
+                <td>地点：</td>
+                <td><input type="text" name="classroom" value="{{classroom}}"></td>
+            </tr>
+            <tr>
+                <td>授课班级：</td>
+                <td><input type="text" name="class" value="{{object}}"></td>
+            </tr>
+      </table>
+      <input type="submit" value="修改信息">
+      </form>
+{%end%}
