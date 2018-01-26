@@ -1,12 +1,16 @@
 ﻿{% extends "./base.html" %}
 {% block title %}课程表{% end %}
+
 {% block content %}
-<form action="/teacher_course" method="post">
+<form action="/teacher_course" method="post" >
   教师：<input type="text" name="teacher">
-  <input type="submit" value="确定">
+  <input type="submit" value="查询">
   <a href="/tcourse.clear"><input type="button" value="清空"></a>
 </form>
-     <table border='1'cellpadding='0' cellspacing='0' width='630'>
+
+     <table border='1'cellpadding='0' cellspacing='0' width='630' class="gridtable" style="width:540px;
+     border-collapse:collapse;table-layout:fixed;word-break:break-all;height:120px">
+     <caption>{{teachername}}课程表</caption>
      	<tr>
         <th></th>
         <th>星期一</th>

@@ -57,4 +57,16 @@ INSERT INTO tc_schedule (tno, tname, cno, cname, classroom, object, week, time) 
 INSERT INTO tc_schedule (tno, tname, cno, cname, classroom, object, week, time) VALUES ('15005', '高爱国', '1230', '项目管理', 'b109', '信息1501', 3, 1);
 
 
+
+
+INSERT INTO login (user_no, password) VALUES ('1510650102', '650102');
+
+INSERT INTO login (user_no, password) VALUES ('1510650101', '650101');
+
+INSERT INTO login (user_no, password) VALUES ('1510650103', '650103');
+
+
+
+
+
                                                   

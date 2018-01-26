@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>登录页面</title>  
+  
+    <link rel="stylesheet" type="text/css" href="{{ static_url('login.css') }}">  
+<script>
+    function validateForm(){
+        var x=document.forms["myForm"]["username"].value;
+        var y=document.forms["myForm"]["password"].value;
+        if (x==null || x==""){
+            alert("用户名必须填写");
+            return false;
+        }
+	
+        if (y==null || y==""){
+            alert("密码必须填写");
+            return false;
+        }
+}
+</script>
+    
+</head>  
+  
+<body >  
+<div id="login_frame">  
+  
+    <b id="image_logo">课程管理系统</b>  
+  
+    <form action="/login" method="post" onsubmit="return validateForm()" name="myForm">  
+  
+        <p><label class="label_input">用户名</label><input type="text" id="username" 
+            class="text_field" name="username" ></p>  
+        <p><label class="label_input">密码</label><input type="password" id="password"
+             class="text_field" name="password" ></p>  
+        <p style="width:222px"><label class="label_input">验证码</label><input type="text" id="check"
+             class="text_field" name="check" style="width:100px; text-align:left;" ></p>
+             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+        
+        <div id="login_control">  
+            <input type="submit" id="btn_login" value="登录" > 
+            <a id="forget_pwd" href="forget_pwd.html">忘记密码？</a>  
+        </div>
+        <input type="text" style="width:45px;text-align:center;" class="check" readonly  unselectable="on"
+        value="{{code}}" name="code" >
+    </form> 
+       
+</div>  
+  
+</body>  
+</html> 

@@ -50,8 +50,13 @@ CREATE TABLE t_chart
     PRIMARY KEY (week, time)
 )
 
-       
-
+--登录信息       
+CREATE TABLE login
+(
+    user_no text  NOT NULL,
+    password text,
+    CONSTRAINT login_pkey PRIMARY KEY (user_no)
+)
 
 
 

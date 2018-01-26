@@ -3,8 +3,18 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
 	<title>{% block title %}{{title}}{% end %}</title>
 	<link rel="stylesheet"  type="text/css"  href="{{ static_url('base.css') }}">
-	{%block js%}  {%end%}
 	
+	{%block js%}  {%end%}
+	{%block css%}
+	<style type="text/css">
+		a:link,a:visited{
+		 text-decoration:none;  /*超链接无下划线*/
+		}
+		a:hover{
+		 text-decoration:underline;  /*鼠标放上去有下划线*/
+		}
+		</style> 
+	 {%end%}
 </head>
 <body>
 
@@ -14,11 +24,12 @@
 
 <div class="left">
 	<ul>
-		<li><a href="/student_course">学生课程表</a></li>
-		<li><a href="/teacher_course">教师课程表</a></li>
-		<li><a href="/courses">课程清单</a></li>
-		<li><a href="/teachers">教师清单</a></li>
-		<li><a href="/schedule">排课信息</a></li>
+		<li><a href="/student_course" >班级课程表</a></li>
+		<li><a href="/teacher_course" >教师课程表</a></li>
+		<li><a href="/courses" >课程清单</a></li>
+		<li><a href="/teachers" >教师清单</a></li>
+		<li><a href="/schedule" >排课信息</a></li>
+		<li><a href="/log-off" >注销</a></li>
 	</ul>
 </div>
 

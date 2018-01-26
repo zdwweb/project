@@ -5,10 +5,12 @@
 
 <form action="/student_course" method="post">
  班级名：<input type="text" name="_cls">
-  <input type="submit" value="确定">
+  <input type="submit" value="查询">
   <a href="/scourse.clear"><input type="button" value="清空"></a>
 </form>
-     <table border='1' cellpadding='0' cellspacing='0' width='630',height='700' >
+     <table border='1' cellpadding='0' cellspacing='0' class="gridtable" style="width:540px;
+     border-collapse:collapse;table-layout:fixed;word-break:break-all;height:120px">
+     <caption>{{classname}}课程表</caption>
      	<tr>
      		<th></th>
      		<th>星期一</th>

@@ -4,11 +4,16 @@ import tornado.web
 import dbconn
 import web
 import os
+import pymysql
+import random  
 dbconn.register_dsn("host=localhost dbname=examdb user=examdbo password=pass")
-
+items=None
+classname=""
+teachername=""
 settings = {
     "static_path": os.path.join('.', 'pages'),
     "debug": True
+ 
 }
 
 
@@ -16,27 +21,54 @@ class BaseReqHandler(tornado.web.RequestHandler):
 
     def db_cursor(self, autocommit=True):
         return dbconn.SimpleDataCursor(autocommit=autocommit)
+    def get_current_user(self):
+        return self.get_secure_cookie("user"),self.get_secure_cookie("pass")
     
 class MainHandler(BaseReqHandler):
     def get(self):
-        self.set_header("Content-Type", "text/html; charSET=UTF-8")
-        self.render(r"pages\base.html", title="首页")
+        global items
+        with self.db_cursor() as cur:
+            sql = '''
+                  SELECT user_no,password FROM login
+                 '''
+            cur.execute(sql)
+            cur.commit()
+        print(items)
+        user,pswd=self.get_current_user()
+        user = tornado.escape.xhtml_escape(user)
+        pswd = tornado.escape.xhtml_escape(pswd)
+        print(user,pswd)
+        
+        if  (user,pswd) in items:
+            self.set_header("Content-Type", "text/html; charSET=UTF-8")
+            self.render(r"pages\base.html", title="首页")
+        else:
+            self.redirect("/login")
+           
 
 class ScheduleHandler(BaseReqHandler):
     #显示排课信息
     def get(self):
+        user = tornado.escape.xhtml_escape(self.get_current_user()[0])
+        if not user:
+            self.redirect("/login")
+            return
+        
         with self.db_cursor() as cur:
             sql = '''
                   SELECT tno,tname,cno,cname,week,time,classroom,object
                   FROM tc_schedule
-                  ORDER BY tno,cno
+                
                   '''
-            cur.execute(sql)
+
+            cur.execute(sql+" ORDER BY object")
             cur.commit()
             items = cur.fetchall()
         self.set_header("Content-Type", "text/html; charSET=UTF-8")
         self.render("pages\list.html", title="排课信息", items=items)
+    
 
+        
 
 class CourseAddHandler(BaseReqHandler):
     #添加排课信息
@@ -172,7 +204,13 @@ class StudentCourseHandler(BaseReqHandler):
     #学生课程表
     def post(self):
         _cls = self.get_argument("_cls")
+        global classname
+        classname=_cls
         with self.db_cursor() as cur:
+            cur.execute("""UPDATE  s_chart SET
+                           cname=null,classroom=null,tname=null
+            """)
+            cur.commit()
             cur.execute('''UPDATE s_chart  as a SET
                            cname= b.cname,classroom=b.classroom,tname=b.tname
                            FROM tc_schedule as b
@@ -182,6 +220,10 @@ class StudentCourseHandler(BaseReqHandler):
         self.redirect("/student_course")
                 
     def get(self):
+        user = tornado.escape.xhtml_escape(self.get_current_user()[0])
+        if not user:
+            self.redirect("/login")
+            return
         course=[]
         with self.db_cursor() as cur:
              for i in range(1,5):
@@ -192,14 +234,20 @@ class StudentCourseHandler(BaseReqHandler):
                  cur.commit()
                  course.append(list(cur.fetchall()))
         self.render("pages\s_chart.html", first=course[0],second=course[1],
-                    third=course[2],fourth=course[3])
+                    third=course[2],fourth=course[3],classname=classname)
 
 
 class TeacherCourseHandler(BaseReqHandler):
    #教师课程表
     def post(self):
+        global teachername
         teacher = self.get_argument("teacher")
+        teachername=teacher
         with self.db_cursor() as cur:
+            cur.execute("""UPDATE  t_chart SET
+                           cname=null,classroom=null,object=null
+            """)
+            cur.commit()
             cur.execute('''UPDATE t_chart  as a SET
                            cname= b.cname,classroom= b.classroom,object=b.object
                            FROM tc_schedule as b
@@ -208,9 +256,13 @@ class TeacherCourseHandler(BaseReqHandler):
             cur.commit()
         self.redirect("/teacher_course")
     def get(self):
+        user = tornado.escape.xhtml_escape(self.get_current_user()[0])
+        if not user:
+            self.redirect("/login")
+            return
         course=[]
         with self.db_cursor() as cur:
-            
+           
             for i in range(1,5):
                 cur.execute('''SELECT cname,classroom,object
                                FROM t_chart
@@ -219,7 +271,7 @@ class TeacherCourseHandler(BaseReqHandler):
                 cur.commit()
                 course.append(list(cur.fetchall()))
         self.render(r"pages\t_chart.html", first=course[0],second=course[1],
-                    third=course[2],fourth=course[3])
+                    third=course[2],fourth=course[3],teachername=teachername)
 
 class TCourseClearHandler(BaseReqHandler):
     #清空教师课程表
@@ -229,6 +281,8 @@ class TCourseClearHandler(BaseReqHandler):
                            cname=null,classroom=null,object=null
             """)
             cur.commit()
+            global teachername
+            teachername=""
         self.redirect("/teacher_course")
 
 class SCourseClearHandler(BaseReqHandler):
@@ -239,11 +293,17 @@ class SCourseClearHandler(BaseReqHandler):
                            cname=null,classroom=null,tname=null
             """)
             cur.commit()
+            global classname
+            classname=""
         self.redirect("/student_course")
 
 
 class CoursesListHandler(BaseReqHandler):
     def get(self):
+        user = tornado.escape.xhtml_escape(self.get_current_user()[0])
+        if not user:
+            self.redirect("/login")
+            return
         with self.db_cursor() as cur:
             cur.execute('''SELECT * FROM course  ORDER BY cno''')
             cur.commit()
@@ -252,13 +312,60 @@ class CoursesListHandler(BaseReqHandler):
 
 class TeachersListHandler(BaseReqHandler):
     def get(self):
+        user = tornado.escape.xhtml_escape(self.get_current_user()[0])
+        if not user:
+            self.redirect("/login")
+            return
         with self.db_cursor() as cur:
             cur.execute('''SELECT * FROM teacher ORDER BY tno''')
             cur.commit()
             items = cur.fetchall()
         self.render(r"pages\t_list.html", title="教师清单",items=items)
 
+
+class LoginHandler(BaseReqHandler):
+    def check_code(self):
+        tem = ""  
+        for i in range(4):  
+            digi = random.randrange(0,11)  
+            if digi == 1 or digi == 5:  ####当randrange(0,11)随机生成数是1或5的时候  ，，，，：）是不是有点绕啊，哈哈哈  
+                num = random.randrange(1,10)  
+                num = str(num)  
+                tem += num  
+            else:  
+                zm = random.randrange(65,91)  
+                zm = chr(zm)  
+                tem += zm  
+        return tem
+
+    def get(self):
+        code=self.check_code()
+        self.render(r"pages\login.html",code=code)
+        
+    def post(self):
+        check_code=self.get_argument("code")#生成的验证码
+        print(check_code)
+        self.set_secure_cookie("user", self.get_argument("username"))
+        self.set_secure_cookie("pass", self.get_argument("password"))
+        #self.set_secure_cookie("check", self.get_argument("check"))#表单中的验证码
+        check = self.get_argument("check")
+        print("生成："+check_code)
+        print("表单："+check)
+        if check==check_code:
+            self.redirect("/")
+        else:
+            self.redirect("/login")
+class OffHandler(BaseReqHandler):
+    def get(self):
+        self.set_secure_cookie("user", b"")
+        self.set_secure_cookie("pass", b"")
+        self.redirect("/login")
+
+               
+
 application= tornado.web.Application([
+    (r"/login", LoginHandler),
+    (r"/log-off", OffHandler),
     (r"/", MainHandler),
     (r"/schedule", ScheduleHandler),
     (r"/course.add",CourseAddHandler),
@@ -271,7 +378,7 @@ application= tornado.web.Application([
     (r"/teachers",TeachersListHandler),
     (r"/courses", CoursesListHandler),
     (r'/(.*)', web.HtplHandler)
-], **settings)
+], **settings,cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__")
 
 
 if __name__ == "__main__":

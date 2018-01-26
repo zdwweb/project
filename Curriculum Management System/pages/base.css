@@ -8,7 +8,7 @@ div.container {
 div.header, div.footer {
 	padding:0.5em;
 	color:white;
-	background-color:gray;
+	background-color:rgb(81, 81, 204);
 	clear:left;
 }
 
@@ -25,4 +25,53 @@ div.content {
 	margin-left:190px;
 	border-left:1px solid gray;
 	padding:1em;
+}
+a:link,a:visited{
+	text-decoration:none;  /*超链接无下划线*/
+   }
+  
+
+   table.gridtable {  
+	font-family: verdana,arial,sans-serif;  
+	font-size:11px;  
+	color:#333333;  
+	border-width: 1px;  
+	border-color: #666666;  
+	border-collapse: collapse;  
+}  
+table.gridtable th {  
+	border-width: 1px;  
+	padding: 8px;  
+	border-style: solid;  
+	border-color: #666666;  
+	background-color: #dedede;  
+}  
+table.gridtable td {  
+	border-width: 1px;  
+	padding: 8px;  
+	border-style: solid;  
+	border-color: #666666;  
+	background-color: #ffffff;  
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 160px;
+    background-color:white;
+}
+ 
+li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+ 
+/* 鼠标移动到选项上修改背景颜色 */
+li a:hover {
+    background-color: #555;
+	color: white;
+	text-decoration: none;
 }
